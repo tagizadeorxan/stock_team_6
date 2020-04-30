@@ -1,0 +1,1 @@
+# stock_team_6
