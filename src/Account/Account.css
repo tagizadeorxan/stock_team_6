@@ -1,0 +1,14 @@
+.fa-sort-down{
+    display: inline-block;
+    text-align: center;
+    color: red;
+    font-size: 25px;
+    
+}
+.fa-sort-up{
+    display: inline-block;
+    text-align: center;
+    color: green;
+    font-size:25px;
+    
+}
