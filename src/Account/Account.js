@@ -1,12 +1,11 @@
-import React from "react"
-import styled from "styled-components"
+import React from "react";
 import './Account.css';
 import Spinner from '../Spinner';
-import {Hr, Wrapper, Company, Price, Value, Change, Loading, ForStockList, DivForPag, PagButton} from './Style'
+import {Hr, Wrapper, Company, Price, Value, Change, Loading, ForStockList, DivForPag, PagButton} from './Style';
 
 
 
-export default class Account extends React.Component {
+class Account extends React.Component {
 
     state = {
         data: [],
@@ -17,8 +16,6 @@ export default class Account extends React.Component {
         pageNumbers: 0,
         firstIndex: 0,
         lastIndex: 0,
-        // pagArray:[],
-        // testState:'',
         threeDots: false,
         threeDotsEnd: true,
     }
@@ -26,6 +23,9 @@ export default class Account extends React.Component {
     componentDidMount() {
         this.getInfo();
     }
+
+    // getting info about all acquired stocks
+
     getInfo = () => {
         fetch("https://5e8da89e22d8cd0016a798db.mockapi.io/users/6/stocks")
             .then((res) => res.json())
@@ -39,23 +39,22 @@ export default class Account extends React.Component {
                             comp.changes = data.profile.changes;
                             comp.changesPercentage = data.profile.changesPercentage;
                             some.push(comp);
-                            this.setState({ data: some, loading: false })
+                            this.setState({ data: some, loading: false });
                             let pageNumbers = Math.ceil(this.state.data.length/this.state.pageSize);
                             let firstIndex = (this.state.currentPage-1)*this.state.pageSize;
                             let lastIndex = (this.state.currentPage)*this.state.pageSize;
-                            // let pagArray = this.state.fetched.slice(firstIndex, lastIndex);
                             this.setState({
                                 pageNumbers: pageNumbers,
                                 firstIndex: firstIndex,
-                                lastIndex: lastIndex,
-                                // pagArray: pagArray,
-                                // testState: "Didmount"
+                                lastIndex: lastIndex
                             })
                         });
                 }
                 
             });
     }
+
+    // pagination per the page number clicked
 
     goToPage = (e) =>{
         let curPage = e.target.value;
@@ -109,7 +108,9 @@ export default class Account extends React.Component {
  
        
     }
- 
+
+    // pagination to left per Left arrow click
+    
     paginateLeft = () => {
         let curPage = this.state.currentPage - 1;
         let firstIndex = (curPage-1) * this.state.pageSize;
@@ -130,6 +131,8 @@ export default class Account extends React.Component {
         }
         
     }
+
+    // pagination to right per Right arrow click
  
     paginateRight = () => {
      let curPage = this.state.currentPage + 1;
@@ -154,8 +157,6 @@ export default class Account extends React.Component {
 
     render() {
         const { data } = this.state;
-        console.log(data)
-
         const total = data.reduce((prevValue, currentValue) => prevValue + +currentValue.purchasePrice,0); 
         const totalChanges = data.reduce((prevValue, currentValue) => prevValue + +currentValue.changes,0);
         const totalChangesPercentage = totalChanges/total*100;
@@ -165,18 +166,17 @@ export default class Account extends React.Component {
                     <h2>{total.toFixed(2)} $</h2>
                 </Value>
                 <Change>
-                    {totalChanges>0?<i class="fas fa-caret-up"></i>:<i class="fas fa-caret-down"></i>}{totalChanges.toFixed(2)}$({totalChangesPercentage.toFixed(2)}%)
+                    {totalChanges>0?<i className="fas fa-caret-up"></i>:<i className="fas fa-caret-down"></i>}{totalChanges.toFixed(2)}$({totalChangesPercentage.toFixed(2)}%)
                 </Change>
 
                 <Hr />
                 <Loading>{this.state.loading && <Spinner />}</Loading>
                 <ForStockList>
                     {data.slice(this.state.firstIndex, this.state.lastIndex).map((item) => {
-                        const { code, amount, purchasePrice, companyName, changes, changesPercentage } = item;
-
+                        const { id, code, amount, purchasePrice, companyName, changes, changesPercentage } = item;
                         return (
-                            <Wrapper>
-                                <Company><span>{code}</span><div>{companyName}</div><span>{amount}</span><div>{purchasePrice} $</div>{changes>0?<i class="fas fa-caret-up"></i>:<i class="fas fa-caret-down"></i>}<div>{changes}{changesPercentage}</div></Company>
+                            <Wrapper key={id}>
+                                <Company><span>{code}</span><div>{companyName}</div><span>{amount}</span><div>{Number(purchasePrice).toFixed(2)} $</div>{changes>0?<i className="fas fa-caret-up"></i>:<i className="fas fa-caret-down"></i>}<div>{changes}{changesPercentage}</div></Company>
                             </Wrapper>
                         )
                     })}
@@ -190,12 +190,13 @@ export default class Account extends React.Component {
                 {this.state.pageNumbers > 3 && <PagButton onClick ={this.goToPage} value = {this.state.pageIndex+3}>{this.state.pageIndex+3}</PagButton>}
                 {this.state.threeDotsEnd && this.state.pageNumbers > 5 && <PagButton onClick ={this.paginate} >...</PagButton>}
                 {(this.state.pageNumbers > 5) && <PagButton onClick ={this.goToPage} value = {this.state.pageNumbers}>{this.state.pageNumbers}</PagButton> }
-                <PagButton onClick ={this.paginateRight}><i class="fas fa-chevron-up right"></i></PagButton>
+                <PagButton onClick ={this.paginateRight}><i className="fas fa-chevron-up right"></i></PagButton>
                 </DivForPag>
                
-
             </div>
         )
 
     }
 }
+
+export default Account;

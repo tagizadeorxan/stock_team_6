@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
-import styled from "styled-components";
-import {Container, Wrapper, BalanceWord, BalanceDigits} from './Style'
-
+import {Container, Wrapper, BalanceWord, BalanceDigits} from './Style';
 
 
 class Balance extends Component{
@@ -23,6 +21,7 @@ class Balance extends Component{
         .then(res => res.json())
         .then(balance => this.setState({balance: String(balance.currentBalance.toFixed(2))}))
     }
+
     render(){
         let { balance } = this.state;
         return(

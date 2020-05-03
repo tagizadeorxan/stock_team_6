@@ -27,7 +27,7 @@ const Name = styled.div`
     width: 600px;
     margin: 0 auto;
     color: #2FC20A;
-    font-size: 48px;
+    font-size: 40px;
     text-align: center;
     margin-bottom: 30px;
 `

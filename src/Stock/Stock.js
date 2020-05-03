@@ -1,11 +1,8 @@
 import React, { Component } from 'react';
-import styled from "styled-components";
 import { Link } from 'react-router-dom';
 import './Stock.css';
 import Spinner from '../Spinner';
-import {Hr, Wrapper, Company, Price, Search, Loading, PagButton,DivForLink, DivForList, DivForPag, NotFound} from './Style'
-
-
+import {Hr, Wrapper, Company, Price, Search, Loading, PagButton,DivForLink, DivForList, DivForPag, NotFound} from './Style';
 
 
 class Stock extends Component{
@@ -20,11 +17,8 @@ class Stock extends Component{
         pageNumbers: 0,
         firstIndex: 0,
         lastIndex: 0,
-        // pagArray:[],
-        // testState:'',
         threeDots: false,
-        threeDotsEnd: true,
-
+        threeDotsEnd: true
     }
 
     componentDidMount() {
@@ -32,7 +26,8 @@ class Stock extends Component{
     
     }
 
- 
+    //getting data from API of shares' list and setting states for pagination
+
     getData = () => {
         fetch('https://financialmodelingprep.com/api/v3/company/stock/list')
         .then((resp) => resp.json())
@@ -47,17 +42,16 @@ class Stock extends Component{
             let pageNumbers = Math.ceil(this.state.fetched.length/this.state.pageSize);
             let firstIndex = (this.state.currentPage-1)*this.state.pageSize;
             let lastIndex = (this.state.currentPage)*this.state.pageSize;
-             // let pagArray = this.state.fetched.slice(firstIndex, lastIndex);
             this.setState({
             pageNumbers: pageNumbers,
             firstIndex: firstIndex,
-            lastIndex: lastIndex,
-            // pagArray: pagArray,
-            // testState: "Didmount"
+            lastIndex: lastIndex
             })
         } 
        )
    }
+
+   //finds the requested stock
 
    search = (items, text) => {
         if(text.toUpperCase().length === 0){
@@ -67,7 +61,9 @@ class Stock extends Component{
         return items.filter((item) => {
             return item.symbol.indexOf(text.toUpperCase()) > -1;
         })
-   }    
+   }
+   
+   // pagination per the page number clicked
 
    goToPage = (e) =>{
        let curPage = e.target.value;
@@ -122,6 +118,8 @@ class Stock extends Component{
       
    }
 
+   // pagination to left per Left arrow click
+
    paginateLeft = () => {
        let curPage = this.state.currentPage - 1;
        let firstIndex = (curPage-1) * this.state.pageSize;
@@ -142,6 +140,8 @@ class Stock extends Component{
        }
        
    }
+
+   // pagination to right per Right arrow click
 
    paginateRight = () => {
     let curPage = this.state.currentPage + 1;
@@ -180,15 +180,14 @@ class Stock extends Component{
                     const { symbol, name, price} = item;
                     if(!symbol || !name || !price) return null;
                     return(
-                        <DivForLink>
-                            <Link to={'/buy/' + symbol} style={{ textDecoration: 'none' }} key={symbol} onClick={() => this.props.clickHandler(symbol)}>
+                        <DivForLink key={symbol}>
+                            <Link to={'/buy/' + symbol} style={{ textDecoration: 'none' }} onClick={() => this.props.clickHandler(symbol)}>
                             <Wrapper>
                                     <Company><span>{symbol}</span><div>{name}</div></Company>
                                 <Price>{String(price).substring(0, String(price).indexOf('.'))}<span>{String(price).substring(String(price).indexOf('.'), String(price).length)}$</span></Price>
                             </Wrapper>
                             </Link> 
                         </DivForLink>
-                        
                     )
                 })}
                     </DivForList>
@@ -202,7 +201,7 @@ class Stock extends Component{
                 <PagButton onClick ={this.goToPage} value = {this.state.pageIndex+3}>{this.state.pageIndex+3}</PagButton>
                 {this.state.threeDotsEnd && <PagButton onClick ={this.paginate} >...</PagButton>}
             <PagButton onClick ={this.goToPage} value = {this.state.pageNumbers}>{this.state.pageNumbers}</PagButton>
-                <PagButton onClick ={this.paginateRight}><i class="fas fa-chevron-up right"></i></PagButton>
+                <PagButton onClick ={this.paginateRight}><i className="fas fa-chevron-up right"></i></PagButton>
                 </DivForPag>
 
             </div>

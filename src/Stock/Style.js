@@ -84,6 +84,10 @@ const Search = styled.div`
 const Loading = styled.div`
     width: 200px;
     margin: 0 auto;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 `
 
 const PagButton = styled.button`

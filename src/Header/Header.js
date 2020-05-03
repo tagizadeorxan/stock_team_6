@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import './Header.css';
 import logo from '../logo.svg';
 import { NavLink } from 'react-router-dom';
-import styled from "styled-components";
 import {Container, Nav} from './Style';
 
 

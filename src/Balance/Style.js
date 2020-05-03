@@ -14,6 +14,7 @@ const Wrapper = styled.div`
     background-color: #833AE0;
     color: #FFDC40;
     position: fixed;
+    left: 0;
     bottom: 0;
     width: 100%;
 `

@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
-import styled from "styled-components";
 import { Link } from 'react-router-dom';
 import Spinner from '../Spinner';
 import {Wrapper, Hr, Back, Name, Price, QuantityWrapper, Minus, Plus, Total, BuyStock, Loading} from './Style.js';
-
 
 
 class Buy extends Component{
@@ -20,6 +18,8 @@ class Buy extends Component{
         this.getBalance();
     }
 
+    // getting information about the stock we want to buy
+
     getStock = () => {
         fetch('https://financialmodelingprep.com/api/v3/company/stock/list')
         .then(res => res.json())
@@ -29,11 +29,15 @@ class Buy extends Component{
         })
     }
 
+    // getting the current balance
+
     getBalance = () => {
         fetch('https://5e8da89e22d8cd0016a798db.mockapi.io/users/6/')
         .then(res => res.json())
         .then(balance => this.setState({balance: balance.currentBalance, loading: false}))
     }
+
+    //  sending data about the purchased stock
 
     postStock = () => {
         const { stock, total, value } = this.state;
@@ -42,7 +46,6 @@ class Buy extends Component{
             amount: value,
             purchasePrice: total
         }
-        console.log(data)
         fetch('https://5e8da89e22d8cd0016a798db.mockapi.io/users/6/stocks', {
             method: 'POST',
             body: JSON.stringify(data),
@@ -51,8 +54,9 @@ class Buy extends Component{
             }
           });
           this.updateBalance();
-
     }
+
+    // updating the balance after purchase
 
     updateBalance = () => {
         const { total, balance } = this.state;
@@ -71,6 +75,8 @@ class Buy extends Component{
     changeHandler = (e) =>{
         this.setState({value: e.target.value}, () => this.calcTotal());
     }
+
+    // calculating the final amount of purchase
 
     calcTotal = () => {
         const { stock, value } = this.state;
@@ -99,7 +105,6 @@ class Buy extends Component{
         const { stock, total, loading } = this.state;
         const price = String(stock.price);
         const totalString = String(Number(total).toFixed(2));
-        console.log(price)
         return(
             <div>
             {loading ? (<Loading><Spinner/></Loading>) : (<Wrapper>
@@ -115,8 +120,8 @@ class Buy extends Component{
                     <Plus onClick={this.increaseQuantity}>+</Plus>
                 </QuantityWrapper>
                 <Total>Buy for <span>{totalString.substring(0, totalString.indexOf('.'))}</span>{totalString.substring(total.indexOf('.'), totalString.length)}$</Total>
-                <Link to='/' style={{ textDecoration: 'none' }}>
-                <BuyStock onClick={this.postStock}>Buy</BuyStock>
+                <Link to='/stock' style={{ textDecoration: 'none' }}>
+                    <BuyStock onClick={this.postStock}>Buy</BuyStock>
                 </Link>
             </Wrapper>)}
             </div>
