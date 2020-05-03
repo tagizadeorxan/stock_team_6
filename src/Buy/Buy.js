@@ -20,21 +20,32 @@ class Buy extends Component{
 
     // getting information about the stock we want to buy
 
+    checkFetch = (response) => {
+        if(!response.ok){
+            throw Error('Что-то пошло не так');
+        }
+        return response;
+    }
+
     getStock = () => {
         fetch('https://financialmodelingprep.com/api/v3/company/stock/list')
+        .then(this.checkFetch)
         .then(res => res.json())
         .then(stock => {
             this.setState({stock: stock.symbolsList.filter((item) => item.symbol === this.props.stockToBuy)[0]},
             () => this.calcTotal())
         })
+        .catch(err =>  {alert(err); this.setState({ loading: false })})
     }
 
     // getting the current balance
 
     getBalance = () => {
         fetch('https://5e8da89e22d8cd0016a798db.mockapi.io/users/6/')
+        .then(this.checkFetch)
         .then(res => res.json())
         .then(balance => this.setState({balance: balance.currentBalance, loading: false}))
+        .catch(err =>  {alert(err); this.setState({ loading: false })})
     }
 
     //  sending data about the purchased stock

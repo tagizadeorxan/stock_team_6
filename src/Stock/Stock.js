@@ -28,17 +28,23 @@ class Stock extends Component{
 
     //getting data from API of shares' list and setting states for pagination
 
+    checkFetch = (response) => {
+        if(!response.ok){
+            throw Error('Что-то пошло не так');
+        }
+        return response;
+    }
+
     getData = () => {
         fetch('https://financialmodelingprep.com/api/v3/company/stock/list')
+        .then(this.checkFetch)
         .then((resp) => resp.json())
         .then((result) =>{
-        
             this.setState({
                 fetched: result.symbolsList,
                 loading: false,
                 
             })
-
             let pageNumbers = Math.ceil(this.state.fetched.length/this.state.pageSize);
             let firstIndex = (this.state.currentPage-1)*this.state.pageSize;
             let lastIndex = (this.state.currentPage)*this.state.pageSize;
@@ -49,6 +55,7 @@ class Stock extends Component{
             })
         } 
        )
+       .catch(err =>  {alert(err); this.setState({ loading: false })})
    }
 
    //finds the requested stock

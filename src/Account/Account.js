@@ -26,13 +26,22 @@ class Account extends React.Component {
 
     // getting info about all acquired stocks
 
+    checkFetch = (response) => {
+        if(!response.ok){
+            throw Error('Что-то пошло не так');
+        }
+        return response;
+    }
+
     getInfo = () => {
         fetch("https://5e8da89e22d8cd0016a798db.mockapi.io/users/6/stocks")
+        .then(this.checkFetch)
             .then((res) => res.json())
             .then((data) => {
                 let some = [];
                 for (let comp of data) {
                     fetch(`https://financialmodelingprep.com/api/v3/company/profile/${comp.code}`)
+                        .then(this.checkFetch)
                         .then((res) => res.json())
                         .then((data) => {
                             comp.companyName = data.profile.companyName;
@@ -48,10 +57,12 @@ class Account extends React.Component {
                                 firstIndex: firstIndex,
                                 lastIndex: lastIndex
                             })
-                        });
+                        })
+                        .catch(err =>  {alert(err); this.setState({ loading: false })})
                 }
                 
-            });
+            })
+            .catch(err =>  {alert(err); this.setState({ loading: false })})
     }
 
     // pagination per the page number clicked
