@@ -28,7 +28,7 @@ class Balance extends Component{
         .then(this.checkFetch)
         .then(res => res.json())
         .then(balance => this.setState({balance: String(balance.currentBalance.toFixed(2))}))
-        .catch(err =>  {alert(err))
+        .catch(err =>  alert(err))
     }
 
     render(){
