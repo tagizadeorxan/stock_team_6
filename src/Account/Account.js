@@ -1,106 +1,26 @@
 import React from "react"
 import styled from "styled-components"
 import './Account.css';
+import Spinner from '../Spinner';
+import {Hr, Wrapper, Company, Price, Value, Change, Loading, ForStockList, DivForPag, PagButton} from './Style'
 
-const Wrapper = styled.div`
-    margin-top: 90px;
-    background-color: #833AE0;
-    color: #FFDC40;
-    width: 850px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin: 0 auto;
 
-`
-const Container = styled.div`
-    max-width: 1350px;
-    margin: 0 auto;
-    padding: 10px;
-    display: flex;
-    align-items: center;
 
-`
+export default class Account extends React.Component {
 
-const BalanceWord = styled.div`
-    font-size: 22px;
-    margin-right:300px;
-`
-
-const BalanceDigits = styled.div`
-    width: 180px;
-    margin-right: 400px;
-    font-size: 36px;
-    span{
-        font-size: 22px;
-    }
-    `
-
-const Wrappered = styled.div`
- width: 850px;
- display: flex;
- flex-wrap:wrap;
- justify-content: space-between;
- align-items: center;
- margin: 0 auto;
-
- }
- `
-const Company = styled.div`
- display:flex;
- align-items:center;
- justify-content: space-between;
- border-bottom: 1px dashed #E0E0E0;
- height:50px;
-
- span{
-    font-size: 10px;
-    color: rgba(0, 0, 0, 0.5);
-    display: block;
-    width: 120px;
- }
-     div{
-        font-size: 22px;
-        color: black;
-        width: 170px;
-    }
-    :hover{
-        background: rgba(131, 58, 224, 0.05);
- `
-
-const Value = styled.div`
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin: 0 auto;
-`
-const Change = styled.div`
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    margin: 0 auto;
-`
-
-const Up = styled.div`
-    width: 0;
-    height: 0;
-    border-left: 10px solid transparent;
-    border-right: 10px solid transparent;
-    border-bottom: 10px solid green;
-
-  `
-const Down = styled.div`
-  width: 0;
-  height: 0;
-  border-left: 10px solid transparent;
-  border-right: 10px solid transparent;
-  border-top: 10px solid red;
-  `
-
-class Account extends React.Component {
-    
     state = {
-        data: []
+        data: [],
+        loading: true,
+        currentPage: 1,
+        pageIndex: 1,
+        pageSize: 20,
+        pageNumbers: 0,
+        firstIndex: 0,
+        lastIndex: 0,
+        // pagArray:[],
+        // testState:'',
+        threeDots: false,
+        threeDotsEnd: true,
     }
 
     componentDidMount() {
@@ -110,38 +30,172 @@ class Account extends React.Component {
         fetch("https://5e8da89e22d8cd0016a798db.mockapi.io/users/6/stocks")
             .then((res) => res.json())
             .then((data) => {
-                this.setState({ data: data })
+                let some = [];
+                for (let comp of data) {
+                    fetch(`https://financialmodelingprep.com/api/v3/company/profile/${comp.code}`)
+                        .then((res) => res.json())
+                        .then((data) => {
+                            comp.companyName = data.profile.companyName;
+                            comp.changes = data.profile.changes;
+                            comp.changesPercentage = data.profile.changesPercentage;
+                            some.push(comp);
+                            this.setState({ data: some, loading: false })
+                            let pageNumbers = Math.ceil(this.state.data.length/this.state.pageSize);
+                            let firstIndex = (this.state.currentPage-1)*this.state.pageSize;
+                            let lastIndex = (this.state.currentPage)*this.state.pageSize;
+                            // let pagArray = this.state.fetched.slice(firstIndex, lastIndex);
+                            this.setState({
+                                pageNumbers: pageNumbers,
+                                firstIndex: firstIndex,
+                                lastIndex: lastIndex,
+                                // pagArray: pagArray,
+                                // testState: "Didmount"
+                            })
+                        });
+                }
+                
             });
-
     }
+
+    goToPage = (e) =>{
+        let curPage = e.target.value;
+        let firstIndex = (curPage-1) * this.state.pageSize;
+        let lastIndex = curPage *this.state.pageSize;
+        let pageNo = this.state.pageNumbers;
+        this.setState({
+            currentPage: curPage,
+            firstIndex:firstIndex,
+         lastIndex: lastIndex
+        })
+        if (curPage > this.state.pageIndex+2 && curPage < this.state.pageNumbers - 1) {
+            this.setState({
+             currentPage: curPage,
+             firstIndex: firstIndex,
+             lastIndex: lastIndex,
+             pageIndex: this.state.pageIndex+1,
+             threeDots: true,
+             
+            })
+        } else if (curPage < this.state.pageIndex+2 && curPage > 2) {
+         this.setState({
+             currentPage: curPage,
+             firstIndex: firstIndex,
+             lastIndex: lastIndex,
+             pageIndex: this.state.pageIndex-1,
+             threeDots: true,
+             threeDotsEnd: true,
+            })
+        } else if (curPage <3 && curPage > 1) {
+         this.setState({
+             currentPage: curPage,
+             firstIndex: firstIndex,
+             lastIndex: lastIndex,
+           
+             threeDots: false,
+            })
+        } else if (Number(curPage) === 1) {
+            this.setState({
+                pageIndex: 1,
+                threeDots:false,
+ 
+            })
+        } else if (Number(curPage) === pageNo) {
+            this.setState({
+                pageIndex: curPage-4,
+                threeDotsEnd:false,
+                threeDots: true
+            })
+        }
+ 
+       
+    }
+ 
+    paginateLeft = () => {
+        let curPage = this.state.currentPage - 1;
+        let firstIndex = (curPage-1) * this.state.pageSize;
+        let lastIndex = curPage *this.state.pageSize;
+        
+        if (curPage > 2) {
+         this.setState({
+             currentPage: curPage,
+             firstIndex: firstIndex,
+             lastIndex: lastIndex,
+             pageIndex: this.state.pageIndex -1,
+         })
+        }
+        if (curPage === 2) {
+            this.setState({
+                threeDots: false,
+            })
+        }
+        
+    }
+ 
+    paginateRight = () => {
+     let curPage = this.state.currentPage + 1;
+     let firstIndex = (curPage-1) * this.state.pageSize;
+     let lastIndex = curPage *this.state.pageSize;
+     
+     if (curPage < this.state.pageNumbers) {
+         this.setState({
+             currentPage: curPage,
+             firstIndex: firstIndex,
+             lastIndex: lastIndex,
+             pageIndex: this.state.pageIndex + 1,
+         })
+     }
+     if (curPage > 3) {
+          this.setState({
+              threeDots:true
+          })
+      }
+     
+     }
+
     render() {
         const { data } = this.state;
-        console.log(data);
-        return (
+        console.log(data)
 
-            <div>
+        const total = data.reduce((prevValue, currentValue) => prevValue + +currentValue.purchasePrice,0); 
+        const totalChanges = data.reduce((prevValue, currentValue) => prevValue + +currentValue.changes,0);
+        const totalChangesPercentage = totalChanges/total*100;
+        return (
+           <div>
                 <Value>
-                    <h2>2400.82 $</h2>
+                    <h2>{total.toFixed(2)} $</h2>
                 </Value>
                 <Change>
-                <i className="fas fa-sort-up"></i>23.68$(+0.73%)
-                <i className="fas fa-sort-down"></i> -24.85$(-0.25%)
+                    {totalChanges>0?<i class="fas fa-caret-up"></i>:<i class="fas fa-caret-down"></i>}{totalChanges.toFixed(2)}$({totalChangesPercentage.toFixed(2)}%)
                 </Change>
-                
-                {data.map((item) => {
-                    const { id, code, amount, purchasePrice} = item;
-                    return(
-                        <Wrappered key={id}>
-                            <Company><span>{code}</span><div>Nike</div><span>{amount}pcs</span><div>{purchasePrice}$</div><i className="fas fa-sort-down"></i><div>1.2%</div></Company>
-                        </Wrappered>
-                    )
-                } )}
-                
+
+                <Hr />
+                <Loading>{this.state.loading && <Spinner />}</Loading>
+                <ForStockList>
+                    {data.slice(this.state.firstIndex, this.state.lastIndex).map((item) => {
+                        const { code, amount, purchasePrice, companyName, changes, changesPercentage } = item;
+
+                        return (
+                            <Wrapper>
+                                <Company><span>{code}</span><div>{companyName}</div><span>{amount}</span><div>{purchasePrice} $</div>{changes>0?<i class="fas fa-caret-up"></i>:<i class="fas fa-caret-down"></i>}<div>{changes}{changesPercentage}</div></Company>
+                            </Wrapper>
+                        )
+                    })}
+                </ForStockList> 
+                <DivForPag> 
+                <PagButton onClick ={this.paginateLeft}><i className="fas fa-chevron-up left"></i></PagButton>
+                <PagButton onClick ={this.goToPage} value = {1}>1</PagButton>
+                {this.state.threeDots && <PagButton >...</PagButton> }
+                {this.state.pageNumbers > 1 && <PagButton onClick ={this.goToPage} value = {this.state.pageIndex+1}>{this.state.pageIndex+1}</PagButton>}
+                {this.state.pageNumbers > 2 && <PagButton onClick ={this.goToPage} value = {this.state.pageIndex+2}>{this.state.pageIndex+2}</PagButton>}
+                {this.state.pageNumbers > 3 && <PagButton onClick ={this.goToPage} value = {this.state.pageIndex+3}>{this.state.pageIndex+3}</PagButton>}
+                {this.state.threeDotsEnd && this.state.pageNumbers > 5 && <PagButton onClick ={this.paginate} >...</PagButton>}
+                {(this.state.pageNumbers > 5) && <PagButton onClick ={this.goToPage} value = {this.state.pageNumbers}>{this.state.pageNumbers}</PagButton> }
+                <PagButton onClick ={this.paginateRight}><i class="fas fa-chevron-up right"></i></PagButton>
+                </DivForPag>
+               
+
             </div>
         )
 
     }
 }
-
-export default Account;
-

@@ -1,11 +1,11 @@
-import React from 'react'
+import React from 'react';
+import './Spinner.css';
 
 const Spinner = () => {
     return(
-        <div class="loadingio-spinner-reload-9rpou4g6sm4">
-            <div class="ldio-jt4qtk6durf">
-        </div><div></div><div>
-        </div></div>
+        <div className="loadingio-spinner-spinner-xwvbfbyq15h"><div className="ldio-hzdea4edhpb">
+    <div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+    </div></div>
     )
 }
 

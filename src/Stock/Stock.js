@@ -3,107 +3,57 @@ import styled from "styled-components";
 import { Link } from 'react-router-dom';
 import './Stock.css';
 import Spinner from '../Spinner';
+import {Hr, Wrapper, Company, Price, Search, Loading, PagButton,DivForLink, DivForList, DivForPag, NotFound} from './Style'
 
-const Hr = styled.hr`
-    margin-top: 60px;
-    height: 12px;
-    border: 0;
-    box-shadow: inset 0 12px 12px -12px rgba(0, 0, 0, 0.5);
-`
 
-const Wrapper = styled.div`
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 850px;
-    margin: 0 auto;
-    border-bottom: 1px dashed #E0E0E0;
-    height: 50px;
-    cursor: pointer;
-    :hover{
-        background: rgba(131, 58, 224, 0.05);
-    }
-`
 
-const Company = styled.div`
-    display: flex;
-    align-items: center;
-    span{
-        font-size: 12px;
-        color: rgba(0, 0, 0, 0.5);
-        display: block;
-        width: 60px;
-    }
-    div{
-        font-size: 22px;
-        color: black;
-        width: 600px;
-    }
-    
-`
-
-const Price = styled.div`
-    span{
-        font-size: 20px;
-    }
-    width: 150px;
-    font-size: 30px;
-    color: black;
-`
-const Search = styled.div`
-  input {
-    border: none;
-    font-family: Roboto;
-    font-size: 30px;
-    text-align: center;
-    color: #833ae0;
-    background: #f3f3f3;
-    width: 300px;
-    margin-left: 11px;
-  }
-  i {
-    border: none;
-    font-size: 20px;
-  }
-  background: #f3f3f3;
-  border-radius: 94px;
-  width: 400px;
-  height: 60px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  flex-direction: space-around;
-  margin: 0 auto;
-  margin-bottom: 50px;
-`
-
-const Nothing = styled.div`
-width: 200px;
-margin: 0 auto;
-text-align: center;
-font-size: 30px;
-`
 
 class Stock extends Component{
 
     state ={
         fetched: [],
         value: '',
-        loading: true
+        loading: true,
+        currentPage: 1,
+        pageIndex: 1,
+        pageSize: 20,
+        pageNumbers: 0,
+        firstIndex: 0,
+        lastIndex: 0,
+        // pagArray:[],
+        // testState:'',
+        threeDots: false,
+        threeDotsEnd: true,
+
     }
 
     componentDidMount() {
         this.getData();
+    
     }
+
  
     getData = () => {
         fetch('https://financialmodelingprep.com/api/v3/company/stock/list')
         .then((resp) => resp.json())
         .then((result) =>{
+        
             this.setState({
                 fetched: result.symbolsList,
-                loading: false
+                loading: false,
+                
+            })
+
+            let pageNumbers = Math.ceil(this.state.fetched.length/this.state.pageSize);
+            let firstIndex = (this.state.currentPage-1)*this.state.pageSize;
+            let lastIndex = (this.state.currentPage)*this.state.pageSize;
+             // let pagArray = this.state.fetched.slice(firstIndex, lastIndex);
+            this.setState({
+            pageNumbers: pageNumbers,
+            firstIndex: firstIndex,
+            lastIndex: lastIndex,
+            // pagArray: pagArray,
+            // testState: "Didmount"
             })
         } 
        )
@@ -119,6 +69,101 @@ class Stock extends Component{
         })
    }    
 
+   goToPage = (e) =>{
+       let curPage = e.target.value;
+       let firstIndex = (curPage-1) * this.state.pageSize;
+       let lastIndex = curPage *this.state.pageSize;
+       let pageNo = this.state.pageNumbers;
+       this.setState({
+           currentPage: curPage,
+           firstIndex:firstIndex,
+        lastIndex: lastIndex
+       })
+       if (curPage > this.state.pageIndex+2 && curPage < this.state.pageNumbers - 1) {
+           this.setState({
+            currentPage: curPage,
+            firstIndex: firstIndex,
+            lastIndex: lastIndex,
+            pageIndex: this.state.pageIndex+1,
+            threeDots: true,
+            
+           })
+       } else if (curPage < this.state.pageIndex+2 && curPage > 2) {
+        this.setState({
+            currentPage: curPage,
+            firstIndex: firstIndex,
+            lastIndex: lastIndex,
+            pageIndex: this.state.pageIndex-1,
+            threeDots: true,
+            threeDotsEnd: true,
+           })
+       } else if (curPage <3 && curPage > 1) {
+        this.setState({
+            currentPage: curPage,
+            firstIndex: firstIndex,
+            lastIndex: lastIndex,
+          
+            threeDots: false,
+           })
+       } else if (Number(curPage) === 1) {
+           this.setState({
+               pageIndex: 1,
+               threeDots:false,
+
+           })
+       } else if (Number(curPage) === pageNo) {
+           this.setState({
+               pageIndex: curPage-4,
+               threeDotsEnd:false,
+               threeDots: true
+           })
+       }
+
+      
+   }
+
+   paginateLeft = () => {
+       let curPage = this.state.currentPage - 1;
+       let firstIndex = (curPage-1) * this.state.pageSize;
+       let lastIndex = curPage *this.state.pageSize;
+       
+       if (curPage > 2) {
+        this.setState({
+            currentPage: curPage,
+            firstIndex: firstIndex,
+            lastIndex: lastIndex,
+            pageIndex: this.state.pageIndex -1,
+        })
+       }
+       if (curPage === 2) {
+           this.setState({
+               threeDots: false,
+           })
+       }
+       
+   }
+
+   paginateRight = () => {
+    let curPage = this.state.currentPage + 1;
+    let firstIndex = (curPage-1) * this.state.pageSize;
+    let lastIndex = curPage *this.state.pageSize;
+    
+    if (curPage < this.state.pageNumbers) {
+        this.setState({
+            currentPage: curPage,
+            firstIndex: firstIndex,
+            lastIndex: lastIndex,
+            pageIndex: this.state.pageIndex + 1,
+        })
+    }
+    if (curPage > 3) {
+         this.setState({
+             threeDots:true
+         })
+     }
+    
+    }
+
     render(){
         const searched = this.search(this.state.fetched, this.state.value);
         return(              
@@ -126,21 +171,40 @@ class Stock extends Component{
                 <Hr />
                 <Search>
                     <i className="fas fa-search"></i>
-                    <input value={this.state.value} placeholder="enter company ticker" onChange={(e) => this.setState({value: e.target.value})}/>
+                    <input style = {{outline: 'none'}}value={this.state.value} placeholder="enter company ticker" onChange={(e) => this.setState({value: e.target.value})}/>
                     </Search>
-                   
-                {searched.length === 0 ? <Nothing>Not found</Nothing> : searched.slice(20 * (1 - 1), 20 * 1).map(item => {
+                    <NotFound>{(searched.length > 0 || this.state.loading) ? "":"Not found"}</NotFound>
+                    <Loading>{this.state.loading && <Spinner />}</Loading>
+                    <DivForList>
+                    {searched.slice(this.state.firstIndex, this.state.lastIndex).map(item => {
                     const { symbol, name, price} = item;
                     if(!symbol || !name || !price) return null;
                     return(
-                        <Link to={'/buy/' + symbol} style={{ textDecoration: 'none' }} key={symbol} onClick={() => this.props.clickHandler(symbol)}>
-                        <Wrapper>
-                                <Company><span>{symbol}</span><div>{name}</div></Company>
-                            <Price>{String(price).substring(0, String(price).indexOf('.'))}<span>{String(price).substring(String(price).indexOf('.'), String(price).length)}$</span></Price>
-                        </Wrapper>
-                        </Link>
+                        <DivForLink>
+                            <Link to={'/buy/' + symbol} style={{ textDecoration: 'none' }} key={symbol} onClick={() => this.props.clickHandler(symbol)}>
+                            <Wrapper>
+                                    <Company><span>{symbol}</span><div>{name}</div></Company>
+                                <Price>{String(price).substring(0, String(price).indexOf('.'))}<span>{String(price).substring(String(price).indexOf('.'), String(price).length)}$</span></Price>
+                            </Wrapper>
+                            </Link> 
+                        </DivForLink>
+                        
                     )
                 })}
+                    </DivForList>
+                  
+                <DivForPag> 
+                <PagButton onClick ={this.paginateLeft}><i className="fas fa-chevron-up left"></i></PagButton>
+                <PagButton onClick ={this.goToPage} value = {1}>1</PagButton>
+                {this.state.threeDots && <PagButton >...</PagButton> }
+                <PagButton onClick ={this.goToPage} value = {this.state.pageIndex+1}>{this.state.pageIndex+1}</PagButton>
+                <PagButton onClick ={this.goToPage} value = {this.state.pageIndex+2}>{this.state.pageIndex+2}</PagButton>
+                <PagButton onClick ={this.goToPage} value = {this.state.pageIndex+3}>{this.state.pageIndex+3}</PagButton>
+                {this.state.threeDotsEnd && <PagButton onClick ={this.paginate} >...</PagButton>}
+            <PagButton onClick ={this.goToPage} value = {this.state.pageNumbers}>{this.state.pageNumbers}</PagButton>
+                <PagButton onClick ={this.paginateRight}><i class="fas fa-chevron-up right"></i></PagButton>
+                </DivForPag>
+
             </div>
         )
     }
@@ -148,4 +212,5 @@ class Stock extends Component{
 
 export default Stock;
 
-
+// slice(4 * (1 - 1),4 * 1)
+// , display:'inline-block', margin: '0 auto', width: '900px'
