@@ -187,7 +187,7 @@ class Account extends React.Component {
                         const { id, code, amount, purchasePrice, companyName, changes, changesPercentage } = item;
                         return (
                             <Wrapper key={id}>
-                               <Link to={`account/${id}`}><Company><span>{code}</span><div>{companyName}</div><span>{amount}</span><div>{Number(purchasePrice).toFixed(2)} $</div>{changes>0?<i className="fas fa-caret-up"></i>:<i className="fas fa-caret-down"></i>}<div>{changes}{changesPercentage}</div></Company></Link> 
+                               <Link style={{textDecoration: 'none'}} to={`account/${id}`}><Company><span>{code}</span><div>{companyName}</div><span>{amount}</span><div>{Number(purchasePrice).toFixed(2)} $</div>{changes>0?<i className="fas fa-caret-up"></i>:<i className="fas fa-caret-down"></i>}<div>{changes}{changesPercentage}</div></Company></Link> 
                             </Wrapper>
                         )
                     })}
