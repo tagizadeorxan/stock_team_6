@@ -26,7 +26,7 @@ class App extends Component{
                     <Header />
                     <Route path='/' exact component={Account}/>
                     <Route path='/stock' render={() => <Stock clickHandler={this.clickHandler} isAuthed={true} />} />
-                    <Route path='/buy' render={() => <Buy stockToBuy={this.state.symbol} isAuthed={true} />}/>
+                    <Route path='/buy/:id' component={Buy}></Route>
                     <Route path='/account/:id' component={Sell}></Route>
                     <Balance />
                 </Router>

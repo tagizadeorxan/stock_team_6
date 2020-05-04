@@ -6,7 +6,7 @@ import {Wrapper, Hr, Back, Name, Price, QuantityWrapper, Minus, Plus, Total, Buy
 
 class Buy extends Component{
     state = {
-        stock: [],
+        stock: {},
         value: '1',
         total: '',
         balance: null,
@@ -28,12 +28,16 @@ class Buy extends Component{
     }
 
     getStock = () => {
-        fetch('https://financialmodelingprep.com/api/v3/company/stock/list')
-        .then(this.checkFetch)
-        .then(res => res.json())
-        .then(stock => {
-            this.setState({stock: stock.symbolsList.filter((item) => item.symbol === this.props.stockToBuy)[0]},
-            () => this.calcTotal())
+        fetch(`https://financialmodelingprep.com/api/v3/company/profile/${this.props.match.params.id}`,{
+            method:'GET',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          })
+          .then(res => res.json())
+          .then(stock => { 
+              console.log(stock);
+            this.setState({stock}, () => this.calcTotal());
         })
         .catch(err =>  {alert(err); this.setState({ loading: false })})
     }
@@ -91,7 +95,7 @@ class Buy extends Component{
 
     calcTotal = () => {
         const { stock, value } = this.state;
-        let total = +stock.price * +value;
+        let total = +stock.profile.price * +value;
         this.setState({total: String(total)});
     }
 
@@ -114,7 +118,10 @@ class Buy extends Component{
 
     render(){
         const { stock, total, loading } = this.state;
-        const price = String(stock.price);
+        if(stock.profile === undefined) {
+            return(null);
+        }
+        const price = String(stock.profile.price);
         const totalString = String(Number(total).toFixed(2));
         return(
             <div>
@@ -122,12 +129,12 @@ class Buy extends Component{
                 <Link to='/stock' style={{ textDecoration: 'none' }}>
                     <Back><i className="fas fa-chevron-left"></i> Back</Back>
                 </Link>
-                <Name>Buy {stock.name}</Name>
+                <Name>Buy {stock.profile.companyName}</Name>
                 <Hr/>
                 <Price>{price.substring(0, price.indexOf('.'))}<span>{price.substring(price.indexOf('.'), price.length)}$</span></Price>
                 <QuantityWrapper>
                     <Minus onClick={this.decreaseQuantity}>-</Minus>
-                    <div><input type='number' value={this.state.value} onChange={this.changeHandler}/></div>
+                    <div><span className="buy-quantity">{this.state.value}</span></div>
                     <Plus onClick={this.increaseQuantity}>+</Plus>
                 </QuantityWrapper>
                 <Total>Buy for <span>{totalString.substring(0, totalString.indexOf('.'))}</span>{totalString.substring(total.indexOf('.'), totalString.length)}$</Total>

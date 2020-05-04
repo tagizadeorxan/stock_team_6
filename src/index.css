@@ -5,4 +5,9 @@ body{
 }
 
 
-
+.buy-quantity { 
+    width: 129px;
+    text-align: center;
+    font-size: 64px;
+    color:#833AE0;
+}
