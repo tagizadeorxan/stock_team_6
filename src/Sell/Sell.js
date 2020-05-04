@@ -50,6 +50,7 @@ class Sell extends React.Component {
         .catch((err) => console.log(err));
     if(result){
         this.updateBalance();
+        this.props.history.goBack()
     }
 
 
@@ -60,6 +61,7 @@ class Sell extends React.Component {
         }).then(res => (res.status === 200) ? result = true : alert("something wrong please try again later"))
      if(result) {
          this.updateBalance();
+         this.props.history.goBack();
      }
     }
 
