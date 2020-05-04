@@ -25,10 +25,10 @@ class Balance extends Component{
 
     getBalance = () => {
         fetch('https://5e8da89e22d8cd0016a798db.mockapi.io/users/6/')
-        .then(this.checkFetch)
+        .then(res=> this.checkFetch(res))
         .then(res => res.json())
         .then(balance => this.setState({balance: String(balance.currentBalance.toFixed(2))}))
-        .catch(err =>  alert(err))
+        .catch(err => console.log(err));
     }
 
     render(){
