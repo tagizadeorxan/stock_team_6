@@ -91,13 +91,13 @@ font-size:16px;
     display: flex;
     justify-content: center;
     flex-shrink: 15px;
-  
+    
 }
 .sell-quantity span {
     width: 129px;
     text-align: center;
     font-size: 64px;
-    color:#833AE0;
+    color:#333333;
 }
 
 .sell-quantity button {
@@ -132,7 +132,7 @@ div.sell-price span:nth-child(2){
 }
 
 .sell-button button {
-    border: 1px solid #FF2C2C;
+    border: 3px solid #FF2C2C;
     background-color: white;
     color:#FF2C2C;
     width: 150px;

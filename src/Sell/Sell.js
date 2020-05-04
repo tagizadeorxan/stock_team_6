@@ -121,7 +121,7 @@ changePrice = () => {
         <div className="main">
 
             <div className="container">
-                <div><i className="fa fa-angle-left"></i><button onClick={() => this.props.history.goBack()}>Back</button></div>
+                <div style={{left: '3%'}}><i className="fa fa-angle-left"></i><button onClick={() => this.props.history.goBack()}>Back</button></div>
                 <div><p>{this.state.codeData.profile.companyName}</p></div>
             </div>
             <div className="sell-defaut-price"><p>{splitstring[0]}.</p><span>{splitstring[1]}$</span></div>
