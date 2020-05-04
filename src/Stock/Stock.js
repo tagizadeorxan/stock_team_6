@@ -31,32 +31,56 @@ class Stock extends Component{
     checkFetch = (response) => {
         if(!response.ok){
             throw Error('Что-то пошло не так');
-        }
+        } 
         return response;
     }
 
     getData = () => {
-        fetch('https://financialmodelingprep.com/api/v3/company/stock/list')
-        .then(this.checkFetch)
-        .then((resp) => resp.json())
-        .then((result) =>{
-            this.setState({
-                fetched: result.symbolsList,
-                loading: false,
-                
-            })
-            let pageNumbers = Math.ceil(this.state.fetched.length/this.state.pageSize);
-            let firstIndex = (this.state.currentPage-1)*this.state.pageSize;
-            let lastIndex = (this.state.currentPage)*this.state.pageSize;
-            this.setState({
-            pageNumbers: pageNumbers,
-            firstIndex: firstIndex,
-            lastIndex: lastIndex
-            })
-        } 
-       )
-       .catch(err =>  {alert(err); this.setState({ loading: false })})
-   }
+        fetch("https://financialmodelingprep.com/api/v3/company/stock/list",{
+  method:'GET',
+  headers: {
+    'Content-Type': 'application/json',
+   
+  },
+})
+.then(res => res.text())
+.then(data => {
+  // Пробуем распарсить полученные данные, если не получается - обрезаем
+  try {
+    return JSON.parse(data);
+  } catch(err) {
+    const lastRecStart = data.lastIndexOf('{');
+    const trimmedData = data.substr(0, lastRecStart - 2) + ']}';
+    return JSON.parse(trimmedData);
+  }
+})
+.then(parsedData => {
+  // Дальше работаем с данными
+
+  
+      this.setState({
+          fetched: parsedData.symbolsList,
+          loading: false,
+          
+      })
+      let pageNumbers = Math.ceil(this.state.fetched.length/this.state.pageSize);
+      let firstIndex = (this.state.currentPage-1)*this.state.pageSize;
+      let lastIndex = (this.state.currentPage)*this.state.pageSize;
+      this.setState({
+      pageNumbers: pageNumbers,
+      firstIndex: firstIndex,
+      lastIndex: lastIndex
+      })
+  }
+ )
+ .catch(err =>  {console.log(err); this.setState({ loading: false })})
+}
+
+
+
+
+
+   
 
    //finds the requested stock
 

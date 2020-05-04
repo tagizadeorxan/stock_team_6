@@ -12,8 +12,6 @@ class Sell extends React.Component {
       
    }
 
-
-
    async getData (id) {
         await fetch(`https://5e8da89e22d8cd0016a798db.mockapi.io/users/6/stocks/${id}`).then(data => data.json()).then(data => this.setState({data,code:data.code,id}));
         this.getCodeData(this.state.code);
