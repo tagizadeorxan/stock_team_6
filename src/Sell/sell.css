@@ -36,6 +36,14 @@
     color:#833AE0;
 }
 
+.container > div:first-child:hover{
+    opacity: 0.5;
+}
+
+.container > div:first-child button{
+    cursor: pointer;
+}
+
 
 .container > div:first-child button {
     color:#833AE0;
@@ -52,7 +60,7 @@
 .container > div:nth-child(2) {
     display: inline-block;
     font-size: 48px;
-    color:#2FC20A;
+    color:#FF2C2C;
     margin: 0 100px;
     word-wrap: break-word;
     width: 800px;
@@ -67,7 +75,7 @@
 
 
 
-.buy-defaut-price {
+.sell-defaut-price {
     display: flex;
     justify-content: center;
     font-size: 30px;
@@ -75,31 +83,31 @@
 }
 
 
-.buy-defaut-price span {
+.sell-defaut-price span {
 font-size:16px;
 }
 
-.buy-quantity {
+.sell-quantity {
     display: flex;
     justify-content: center;
     flex-shrink: 15px;
   
 }
-.buy-quantity span {
+.sell-quantity span {
     width: 129px;
     text-align: center;
     font-size: 64px;
     color:#833AE0;
 }
 
-.buy-quantity button {
+.sell-quantity button {
     background: white;
     border: none;
     color:#833AE0;
     outline: none;
 }
 
-.buy-price {
+.sell-price {
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -107,26 +115,26 @@ font-size:16px;
     margin-top:20px;
 }
 
-.buy-price span:nth-child(1) {
+.sell-price span:nth-child(1) {
      margin-right: 5px;
 }
 
-div.buy-price span:nth-child(2){
+div.sell-price span:nth-child(2){
     font-size:25px;
    
     }
 
-.buy-button {
+.sell-button {
     display: flex;
     justify-content: center;  
     margin-top: 15px;
     
 }
 
-.buy-button button {
-    border: 1px solid #833AE0;
+.sell-button button {
+    border: 1px solid #FF2C2C;
     background-color: white;
-    color:#833AE0;
+    color:#FF2C2C;
     width: 150px;
     height: 50px;
     border-radius:28px;
@@ -135,9 +143,9 @@ div.buy-price span:nth-child(2){
     outline:0;
 }
 
-.buy-button button:hover {
-    border: 1px solid #833AE0;
-    background-color: #833AE0;
+.sell-button button:hover {
+    border: 1px solid #FF2C2C;
+    background-color: #FF2C2C;
     color:white;
     width: 150px;
     height: 50px;

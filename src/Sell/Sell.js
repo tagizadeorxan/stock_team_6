@@ -121,21 +121,21 @@ changePrice = () => {
         <div className="main">
 
             <div className="container">
-                <div><i className="glyphicon glyphicon-menu-left"></i><button onClick={() => this.props.history.goBack()}>Back</button></div>
+                <div><i className="fa fa-angle-left"></i><button onClick={() => this.props.history.goBack()}>Back</button></div>
                 <div><p>{this.state.codeData.profile.companyName}</p></div>
             </div>
-            <div className="buy-defaut-price"><p>{splitstring[0]}.</p><span>{splitstring[1]}$</span></div>
-            <div className="buy-quantity">
+            <div className="sell-defaut-price"><p>{splitstring[0]}.</p><span>{splitstring[1]}$</span></div>
+            <div className="sell-quantity">
                 <button onClick={this.handleMinus}>-</button>
                 <span>{this.state.value}</span>
                 <button onClick={this.handlePlus}>+</button>
             </div>
-            <div className="buy-price">
+            <div className="sell-price">
                 <span>Sell for </span>
                 <span> {splitstring2[0]}.</span>
                 <span>{splitstring2[1]}$</span>
             </div>
-            <div className="buy-button" > <button onClick={this.handleSell}>Sell</button></div>
+            <div className="sell-button" > <button onClick={this.handleSell}>Sell</button></div>
             {/* <DatePicker symbol={this.state.data.symbol} /> */}
         </div>
     )
