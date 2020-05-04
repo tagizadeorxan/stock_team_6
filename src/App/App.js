@@ -8,7 +8,7 @@ import Account from '../Account';
 import Stock from '../Stock';
 import Buy from '../Buy';
 import Balance from '../Balance';
-
+import Sell from '../Sell/Sell';
 
 class App extends Component{
     state = {
@@ -27,6 +27,7 @@ class App extends Component{
                     <Route path='/' exact component={Account}/>
                     <Route path='/stock' render={() => <Stock clickHandler={this.clickHandler} isAuthed={true} />} />
                     <Route path='/buy' render={() => <Buy stockToBuy={this.state.symbol} isAuthed={true} />}/>
+                    <Route path='/account/:id' component={Sell}></Route>
                     <Balance />
                 </Router>
             </div>

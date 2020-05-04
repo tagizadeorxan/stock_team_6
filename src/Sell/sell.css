@@ -1,0 +1,177 @@
+* {
+    margin: 0;
+    padding: 0;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+
+
+.container {
+    margin-top: 20px;
+    position: relative;
+    text-align: center;
+    overflow: hidden;
+    margin-bottom: 60px;
+   
+    width: 100%;
+    box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.15);
+}
+
+.container > div:first-child,
+.container > div:nth-child(2) {
+    padding: 10px 20px;
+   
+    color: #fff;
+    text-transform: uppercase;
+    font: 15px/1 Sans-Serif;
+}
+
+.container > div:first-child {
+    position: absolute;
+    left: 18%;
+    width: 130px;
+    outline: none;
+    font-size: 18px;
+    color:#833AE0;
+}
+
+
+.container > div:first-child button {
+    color:#833AE0;
+    background-color: white;
+    border:none;
+    outline: none;
+    margin-top: 10px;
+    margin-left: 10px;
+    font-size: 20px;
+ 
+}
+
+
+.container > div:nth-child(2) {
+    display: inline-block;
+    font-size: 48px;
+    color:#2FC20A;
+    margin: 0 100px;
+    word-wrap: break-word;
+    width: 800px;
+}
+
+
+
+
+
+
+
+
+
+
+.buy-defaut-price {
+    display: flex;
+    justify-content: center;
+    font-size: 30px;
+    align-items:baseline;
+}
+
+
+.buy-defaut-price span {
+font-size:16px;
+}
+
+.buy-quantity {
+    display: flex;
+    justify-content: center;
+    flex-shrink: 15px;
+  
+}
+.buy-quantity span {
+    width: 129px;
+    text-align: center;
+    font-size: 64px;
+    color:#833AE0;
+}
+
+.buy-quantity button {
+    background: white;
+    border: none;
+    color:#833AE0;
+    outline: none;
+}
+
+.buy-price {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: baseline;
+    margin-top:20px;
+}
+
+.buy-price span:nth-child(1) {
+     margin-right: 5px;
+}
+
+div.buy-price span:nth-child(2){
+    font-size:25px;
+   
+    }
+
+.buy-button {
+    display: flex;
+    justify-content: center;  
+    margin-top: 15px;
+    
+}
+
+.buy-button button {
+    border: 1px solid #833AE0;
+    background-color: white;
+    color:#833AE0;
+    width: 150px;
+    height: 50px;
+    border-radius:28px;
+    cursor: pointer;
+    margin-top: 15px;
+    outline:0;
+}
+
+.buy-button button:hover {
+    border: 1px solid #833AE0;
+    background-color: #833AE0;
+    color:white;
+    width: 150px;
+    height: 50px;
+    border-radius:28px;
+    cursor: pointer;
+    margin-top: 15px;
+}
+
+
+.date-picker {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin-top: 15px;
+   font-size: 40px;
+   outline:0;
+}
+
+
+.picker {
+    border: 1px solid #833AE0;
+    text-align: center;
+    margin-left: 5px;
+    width: 150px;
+    height: 50px;
+    border-radius:28px;
+    margin-top: 15px;
+    font-size:10px;
+    outline:0;
+}
+
+.chart {
+    display: flex;
+    justify-content: center;
+    margin-top:15px;
+    margin-bottom: 105px;
+}
