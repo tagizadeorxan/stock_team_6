@@ -91,7 +91,7 @@ font-size:16px;
     display: flex;
     justify-content: center;
     flex-shrink: 15px;
-    
+    margin-top: 20px;
 }
 .sell-quantity span {
     width: 129px;
