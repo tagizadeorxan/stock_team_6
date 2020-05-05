@@ -24,11 +24,8 @@ class Sell extends React.Component {
    }
 
 
-   handleSell = () => {
-        
+   handleSell = () => { 
      this.removeStock();
-    
-
    }
 
 
@@ -42,7 +39,7 @@ class Sell extends React.Component {
         headers: { 'Content-type': 'application/json' },
         body: JSON.stringify({
             amount: this.state.data.amount-this.state.value,
-            purchasePrice: this.state.price,
+            purchasePrice: this.state.data.purchasePrice - this.state.price,
         })
     }
 
